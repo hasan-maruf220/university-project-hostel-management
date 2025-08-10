@@ -2,6 +2,36 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define TERMINAL_WIDTH 160
+
+#define RESET   "\033[0m"
+#define BLACK   "\033[30m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define BLUE    "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN    "\033[36m"
+#define WHITE   "\033[37m"
+
+// Bright colors
+#define BRIGHT_BLACK   "\033[90m"
+#define BRIGHT_RED     "\033[91m"
+#define BRIGHT_GREEN   "\033[92m"
+#define BRIGHT_YELLOW  "\033[93m"
+#define BRIGHT_BLUE    "\033[94m"
+#define BRIGHT_MAGENTA "\033[95m"
+#define BRIGHT_CYAN    "\033[96m"
+#define BRIGHT_WHITE   "\033[97m"
+
+// Background colors
+#define BG_RED     "\033[41m"
+#define BG_GREEN   "\033[42m"
+#define BG_YELLOW  "\033[43m"
+#define BG_BLUE    "\033[44m"
+#define BG_MAGENTA "\033[45m"
+#define BG_CYAN    "\033[46m"
+
 #define MAX_USERNAME 50
 #define MAX_PASSWORD 50
 #define MAX_LINE 150
@@ -59,7 +89,6 @@ void getCurrentDate(char *date);
 void handleManager();
 void managerDashboard();
 int managerLogin();
-int managerSignupRequest();
 
 void viewAllBookings();
 void approveRejectBookings();
@@ -107,16 +136,20 @@ int main() {
         switch (choice) {
             case 1:
                 handleStudent();
+                system("cls");
                 break;
             case 2:
                 handleManager();
+                system("cls");
                 break;
             case 3:
                 handleOwner();
+                system("cls");
                 break;
             case 4:
                 printf("\nThank you for using the University Hostel Management System!\n");
                 printf("Have a great day ahead!\n");
+                system("cls");
                 exit(0);
             default:
                 printf("\nSorry, that's not a valid option.\n");
@@ -128,34 +161,37 @@ int main() {
 }
 
 void showWelcome() {
-    printf("                        SMART HOSTEL MANAGEMENT SYSTEM\n");
-    printf("                           Welcome to digital home!\n");
-    printf("\n\nThis system will make you feel you are in future\n");
-    printf("Let's get you connected to us.\n\n");
+    printCentered(BRIGHT_GREEN"WELCOME TO OUR \n \n \n \n \n \n"RESET);
+    printf(BRIGHT_RED " __    __    ______        _______.___________. _______  __         .___  ___.      ___   .___________. _______ \n" RESET);
+    printf(RED "|  |  |  |  /  __  \\      /       |           ||   ____||  |        |   \\/   |     /   \\  |           ||   ____|\n" RESET);
+    printf(BRIGHT_YELLOW "|  |__|  | |  |  |  |    |   (----`---|  |----`|  |__   |  |        |  \\  /  |    /  ^  \\ `---|  |----`|  |__   \n" RESET);
+    printf(YELLOW "|   __   | |  |  |  |     \\   \\       |  |     |   __|  |  |        |  |\\/|  |   /  /_\\  \\    |  |     |   __| \n" RESET);
+    printf(BRIGHT_RED "|  |  |  | |  `--'  | .----)   |      |  |     |  |____ |  `----.   |  |  |  |  /  _____  \\   |  |     |  |____ \n" RESET);
+    printf(RED "|__|  |__|  \\______/  |_______/       |__|     |_______||_______|   |__|  |__| /__/     \\__\\  |__|     |_______|\n\n\n\n\n\n" RESET);
     pressEnterToContinue();
     system("cls");
 }
 
 void showMainMenu() {
-    printf("                                  SELECT YOUR ROLE\n");
-    printf("1. Student Portal\n");
-    printf("2. Manager Portal\n");
-    printf("3. Owner Portal\n");
-    printf("4. Exit System\n");
-    printf("                    =============================================\n");
+    printCentered("SELECT YOUR ROLE\n");
+    printCentered(BRIGHT_GREEN"1. Student \n"RESET);
+    printCentered(BRIGHT_GREEN"2. Manager \n"RESET);
+    printCentered(BRIGHT_GREEN"3. Owner \n"RESET);
+    printCentered("4. Exit System\n");
+    printCentered("=============================================\n");
 }
 
 void handleStudent() {
     int action;
     system("cls");
 
-    printf("                               STUDENT PORTAL\n");
-    printf("Welcome to the student section!\n");
-    printf("Here you can access your hostel account and services.\n\n");
-    printf("1. Login to existing account\n");
-    printf("2. Create new student account\n");
-    printf("3. Return to main menu\n");
-    printf("\nWhat would you like to do? ");
+    printCentered(BRIGHT_RED"STUDENT DormDesk\n"RESET);
+    printCentered("Welcome to the student section!\n");
+    printCentered("Here you can access your hostel account and services.\n\n");
+    printCentered(BRIGHT_GREEN"1. Login to existing account\n"RESET);
+    printCentered(BRIGHT_GREEN"2. Create new student account\n"RESET);
+    printCentered(BRIGHT_GREEN"3. Return to main menu\n\n\n\n\n"RESET);
+    printf(YELLOW"\nWhat would you like to do? coice your number :  "RESET);
 
     if (scanf("%d", &action) != 1) {
         printf("Invalid input! Please enter a number.\n");
@@ -167,16 +203,16 @@ void handleStudent() {
     switch (action) {
         case 1:
             if (login("students.txt", "Student")) {
-                printf("                             STUDENT DASHBOARD\n");
-                printf("Welcome back! Login successful.\n");
+                printCentered(RED"STUDENT DASHBOARD\n"RESET);
+                printCentered("Welcome back!\n");
                 studentDashboard();
             }
             break;
         case 2:
             if (signup("students.txt", "Student")) {
                 printf("\nGreat! Your student account has been created successfully.\n");
-                printf("You can now login with your new credentials.\n");
-                printf("Welcome to our hostel community!\n");
+                printf("You can now login with your new username and password.\n");
+                printf("Welcome to our hostel!\n");
                 pressEnterToContinue();
             }
             break;
@@ -193,18 +229,16 @@ void studentDashboard() {
 
     while (1) {
         system("cls");
-        printf("\n========================================================\n");
-        printf("              STUDENT DASHBOARD\n");
-        printf("========================================================\n");
+        printCentered(BLUE"              STUDENT DASHBOARD\n"RESET);
+        printCentered(RED"========================================================\n"RESET);
         printf("Welcome back, %s!\n\n", current_username);
-        printf("Choose an option:\n");
-        printf("1. View Available Rooms\n");
-        printf("2. Book a Room\n");
-        printf("3. Request Check-in / Check-out\n");
-        printf("4. View My Room Details\n");
-        printf("5. Submit a Complaint\n");
-        printf("6. Logout\n");
-        printf("\nEnter your choice: ");
+        printCentered(GREEN"1. View Available Rooms\n"RESET);
+        printCentered(GREEN"2. Book a Room\n"RESET);
+        printCentered(GREEN"3. Request Check-in / Check-out\n"RESET);
+        printCentered(GREEN"4. View My Room Details\n"RESET);
+        printCentered(GREEN"5. Submit a Complaint\n"RESET);
+        printCentered(GREEN"6. Logout\n"RESET);
+        printf(YELLOW"\nEnter your choice: "RESET);
 
         if (scanf("%d", &choice) != 1) {
             printf("Invalid input! Please enter a number.\n");
@@ -216,21 +250,27 @@ void studentDashboard() {
         switch (choice) {
             case 1:
                 viewAvailableRooms();
+                system("cls");
                 break;
             case 2:
                 bookRoomMenu();
+                system("cls");
                 break;
             case 3:
                 requestCheckInOut();
+                system("cls");
                 break;
             case 4:
                 viewMyRoomDetails();
+                system("cls");
                 break;
             case 5:
                 submitComplaint();
+                system("cls");
                 break;
             case 6:
                 printf("\nLogging out...\n");
+                system("cls");
                 return;
             default:
                 printf("\nInvalid choice. Please try again.\n");
@@ -244,15 +284,13 @@ void bookRoomMenu() {
 
     while (1) {
         system("cls");
-        printf("\n========================================================\n");
-        printf("              ROOM BOOKING MENU\n");
-        printf("========================================================\n");
-        printf("Choose an option:\n");
-        printf("1. Book a Room\n");
-        printf("2. View My Bookings\n");
-        printf("3. Check Room Details\n");
-        printf("4. Return to Dashboard\n");
-        printf("\nEnter your choice: ");
+        printCentered(BLUE"ROOM BOOKING MENU\n"RESET);
+        printCentered(RED"========================================================\n"RESET);
+        printCentered(GREEN"1. Book a Room\n"RESET);
+        printCentered(GREEN"2. View My Bookings\n"RESET);
+        printCentered(GREEN"3. Check Room Details\n"RESET);
+        printCentered("4. Return to Dashboard\n");
+        printf(YELLOW"\nEnter your choice: "RESET);
 
         if (scanf("%d", &choice) != 1) {
             printf("Invalid input! Please enter a number.\n");
@@ -264,15 +302,19 @@ void bookRoomMenu() {
         switch (choice) {
             case 1:
                 bookRoom();
+                system("cls");
                 break;
             case 2:
                 viewMyBookings();
+                system("cls");
                 break;
             case 3:
                 checkRoomDetails();
+                system("cls");
                 break;
             case 4:
                 printf("\nReturning to dashboard...\n");
+                system("cls");
                 return;
             default:
                 printf("\nInvalid choice. Please try again.\n");
@@ -317,9 +359,8 @@ void viewAvailableRooms() {
     int found = 0;
     system("cls");
 
-    printf("\n========================================================\n");
-    printf("                   AVAILABLE ROOMS\n");
-    printf("========================================================\n");
+    printCentered(BLUE"AVAILABLE ROOMS\n"RESET);
+    printCentered(RED"========================================================\n"RESET);
     printf("Room No. | Floor | Type   | Capacity | Rent     | Facilities\n");
     printf("--------------------------------------------------------\n");
 
@@ -329,7 +370,7 @@ void viewAvailableRooms() {
                   room.facilities, &room.available) == 8) {
 
         if (room.available == 1 && room.occupied < room.capacity) {
-            printf("%-8d | %-5d | %-6s | %-8d | %-8.2f | %s\n",
+            printf(YELLOW"%-8d | %-5d | %-6s | %-8d | %-8.2f | %s\n"RESET,
                    room.room_number, room.floor, room.room_type,
                    room.capacity, room.rent, room.facilities);
             found = 1;
@@ -349,14 +390,12 @@ void bookRoom() {
     Booking booking;
     system("cls");
 
-
-    printf("\n========================================================\n");
-    printf("                    ROOM BOOKING\n");
-    printf("========================================================\n");
+    printCentered(BRIGHT_RED"                    ROOM BOOKING\n"RESET);
+    printCentered(BRIGHT_BLUE"========================================================\n"RESET);
 
     viewAvailableRooms();
 
-    printf("\nEnter the room number you want to book: ");
+    printf(YELLOW"\nEnter the room number you want to book: "RESET);
     if (scanf("%d", &room_number) != 1) {
         printf("Invalid room number!\n");
         clearInputBuffer();
@@ -386,16 +425,15 @@ void bookRoom() {
     saveBooking(booking);
     system("cls");
 
-    printf("\n========================================================\n");
-    printf("          BOOKING SUBMITTED SUCCESSFULLY!\n");
-    printf("========================================================\n");
+    printCentered(BRIGHT_RED"BOOKING SUBMITTED SUCCESSFULLY!\n"RESET);
+    printCentered(BRIGHT_BLUE"========================================================\n"RESET);
     printf("Booking ID: %d\n", booking.booking_id);
     printf("Room Number: %d\n", booking.room_number);
     printf("Student: %s\n", booking.student_name);
     printf("Phone: %s\n", booking.student_phone);
     printf("Booking Date: %s\n", booking.booking_date);
-    printf("Status: %s\n", booking.status);
-    printf("\nYour booking request has been sent to the manager for approval.\n");
+    printf("Status: %s\n\n\n", booking.status);
+    printf(YELLOW"\nYour booking request has been sent to the manager for approval.\n"RESET);
     printf("You will be notified once it's processed.\n");
 }
 
@@ -410,9 +448,8 @@ void viewMyBookings() {
     int found = 0;
     system("cls");
 
-    printf("\n========================================================\n");
-    printf("                     MY BOOKINGS\n");
-    printf("========================================================\n");
+    printCentered(BRIGHT_RED"                     MY BOOKINGS\n"RESET);
+    printCentered(BRIGHT_BLUE"========================================================\n"RESET);
     printf("Booking ID | Room No. | Date       | Status   | Student Name\n");
     printf("--------------------------------------------------------\n");
 
@@ -423,7 +460,7 @@ void viewMyBookings() {
                   booking.student_phone) == 7) {
 
         if (strcmp(booking.student_username, current_username) == 0) {
-            printf("%-10d | %-8d | %-10s | %-8s | %s\n",
+            printf(YELLOW"%-10d | %-8d | %-10s | %-8s | %s\n"RESET,
                    booking.booking_id, booking.room_number,
                    booking.booking_date, booking.status, booking.student_name);
             found = 1;
@@ -431,7 +468,7 @@ void viewMyBookings() {
     }
 
     if (!found) {
-        printf("No bookings found for your account.\n");
+        printf(BRIGHT_YELLOW"No bookings found for your account.\n"RESET);
     }
 
     printf("========================================================\n");
@@ -446,7 +483,7 @@ void checkRoomDetails() {
         return;
     }
 
-    printf("Enter room number to check details: ");
+    printf(YELLOW"Enter room number to check details: "RESET);
     if (scanf("%d", &room_number) != 1) {
         printf("Invalid room number!\n");
         clearInputBuffer();
@@ -465,9 +502,8 @@ void checkRoomDetails() {
 
         if (room.room_number == room_number) {
             system("cls");
-            printf("\n========================================================\n");
-            printf("                   ROOM DETAILS\n");
-            printf("========================================================\n");
+            printCentered(BRIGHT_RED"                   ROOM DETAILS\n"RESET);
+            printCentered(BRIGHT_BLUE"========================================================\n"RESET);
             printf("Room Number: %d\n", room.room_number);
             printf("Floor: %d\n", room.floor);
             printf("Room Type: %s\n", room.room_type);
@@ -492,16 +528,13 @@ void checkRoomDetails() {
 void requestCheckInOut() {
     int choice;
     system("cls");
-
-    printf("\n========================================================\n");
-    printf("              CHECK-IN / CHECK-OUT REQUEST\n");
-    printf("========================================================\n");
-    printf("Choose an option:\n");
-    printf("1. Request Check-in\n");
-    printf("2. Request Check-out\n");
-    printf("3. View Check-in/Check-out Status\n");
-    printf("4. Return to Dashboard\n");
-    printf("\nEnter your choice: ");
+    printCentered(BRIGHT_RED"              CHECK-IN / CHECK-OUT REQUEST\n"RESET);
+    printCentered(BRIGHT_BLUE"========================================================\n"RESET);
+    printCentered(BRIGHT_GREEN"1. Request Check-in\n"RESET);
+    printCentered(BRIGHT_GREEN"2. Request Check-out\n"RESET);
+    printCentered(BRIGHT_GREEN"3. View Check-in/Check-out Status\n"RESET);
+    printCentered("4. Return to Dashboard\n");
+    printf(BRIGHT_YELLOW"\nEnter your choice: "RESET);
 
     if (scanf("%d", &choice) != 1) {
         printf("Invalid input! Please enter a number.\n");
@@ -545,9 +578,9 @@ void requestCheckInOut() {
             break;
 
         case 3:
-            printf("\n========================================================\n");
-            printf("              YOUR REQUEST STATUS\n");
-            printf("========================================================\n");
+            printCentered(BRIGHT_BLUE"\n========================================================\n"RESET);
+            printCentered(BRIGHT_RED"              YOUR REQUEST STATUS\n"RESET);
+            printCentered(BRIGHT_BLUE"========================================================\n"RESET);
 
             file = fopen("checkin_requests.txt", "r");
             int found = 0;
@@ -616,9 +649,8 @@ void viewMyRoomDetails() {
     fclose(file);
 
     if (!found) {
-        printf("\n========================================================\n");
-        printf("                   NO ROOM ASSIGNED\n");
-        printf("========================================================\n");
+        printCentered(BRIGHT_RED"NO ROOM ASSIGNED\n"RESET);
+        printCentered(BRIGHT_BLUE"========================================================\n"RESET);
         printf("You don't have any approved room booking yet.\n");
         printf("Please book a room and wait for manager approval.\n");
         return;
@@ -639,9 +671,8 @@ void viewMyRoomDetails() {
                   room.facilities, &room.available) == 8) {
 
         if (room.room_number == assigned_room) {
-            printf("\n========================================================\n");
-            printf("                   MY ROOM DETAILS\n");
-            printf("========================================================\n");
+            printCentered(BRIGHT_RED"MY ROOM DETAILS\n"RESET);
+            printCentered(BRIGHT_BLUE"========================================================\n"RESET);
             printf("Student Name: %s\n", booking.student_name);
             printf("Username: %s\n", current_username);
             printf("Phone: %s\n", booking.student_phone);
@@ -671,11 +702,10 @@ void submitComplaint() {
     char complaint[500];
     char subject[100];
 
-    printf("\n========================================================\n");
-    printf("              SUBMIT A COMPLAINT\n");
-    printf("========================================================\n");
+    printCentered(BRIGHT_RED"SUBMIT A COMPLAINT\n"RESET);
+    printCentered(BRIGHT_BLUE"========================================================\n"RESET);
 
-    printf("Enter complaint subject: ");
+    printf(BRIGHT_YELLOW"Enter complaint subject: "RESET);
     fgets(subject, sizeof(subject), stdin);
     subject[strcspn(subject, "\n")] = '\0';
 
@@ -706,14 +736,13 @@ void submitComplaint() {
             current_username, date, subject, complaint);
     fclose(file);
 
-    printf("\n========================================================\n");
-    printf("          COMPLAINT SUBMITTED SUCCESSFULLY!\n");
-    printf("========================================================\n");
+    printCentered(BRIGHT_RED"COMPLAINT SUBMITTED SUCCESSFULLY!\n"RESET);
+    printCentered(BRIGHT_BLUE"========================================================\n"RESET);
     printf("Subject: %s\n", subject);
     printf("Date: %s\n", date);
     printf("Status: Pending\n");
-    printf("\nYour complaint has been forwarded to the management.\n");
-    printf("You will receive a response within 24-48 hours.\n");
+    printf(BRIGHT_YELLOW"\nYour complaint has been forwarded to the management.\n"RESET);
+    printf(BRIGHT_YELLOW"You will receive a response within 24-48 hours.\n"RESET);
 }
 
 int isRoomAvailable(int room_number) {
@@ -783,13 +812,11 @@ void handleManager() {
     int action;
     system("cls");
 
-    printf("                               MANAGER PORTAL\n");
-    printf("Welcome to the management section!\n");
-    printf("Your administrative access awaits.\n\n");
-    printf("1. Login to manager account\n");
-    printf("2. Request manager registration\n");
-    printf("3. Return to main menu\n");
-    printf("\nPlease choose an option: ");
+    printCentered(BRIGHT_RED"MANAGER HostelCommand\n"RESET);
+    printCentered(BRIGHT_BLUE"Welcome to the management section!\n"RESET);
+    printCentered(BRIGHT_GREEN"1. Login to manager account\n"RESET);
+    printCentered(BRIGHT_GREEN"2. Return to main menu\n"RESET);
+    printf(BRIGHT_YELLOW"\nPlease choose an option: "RESET);
 
     if (scanf("%d", &action) != 1) {
         printf("Invalid input! Please enter a number.\n");
@@ -803,20 +830,15 @@ void handleManager() {
             if (managerLogin()) {
                 managerDashboard();
             }
+            system("cls");
             break;
+
         case 2:
-            if (managerSignupRequest()) {
-                printf("\nYour manager registration request has been submitted.\n");
-                printf("Please wait for owner approval to activate your account.\n");
-                printf("You will be notified once your request is processed.\n");
-                pressEnterToContinue();
-            }
-            break;
-        case 3:
             printf("\nReturning to main menu...\n\n");
+            system("cls");
             break;
         default:
-            printf("\nInvalid selection. Please choose 1, 2, or 3.\n\n");
+            printf("\nInvalid selection. Please choose 1, 2,.\n\n");
     }
 }
 
@@ -828,18 +850,18 @@ int managerLogin() {
     int found = 0;
     system("cls");
 
-    printf("                                MANAGER LOGIN\n");
-    printf("Please enter your login information.\n\n");
+    printCentered(BRIGHT_RED"MANAGER LOGIN\n"RESET);
+    printCentered(BRIGHT_BLUE"Please enter your login information.\n\n"RESET);
 
-    printf("Username: ");
+    printf(BRIGHT_YELLOW"Username: "RESET);
     fgets(current_username, MAX_USERNAME, stdin);
     current_username[strcspn(current_username, "\n")] = '\0';
 
-    printf("Password: ");
+    printf(BRIGHT_YELLOW"Password: "RESET);
     fgets(password, MAX_PASSWORD, stdin);
     password[strcspn(password, "\n")] = '\0';
 
-    printf("\nVerifying your information...\n");
+    printf(BRIGHT_GREEN"\nVerifying your information...\n"RESET);
 
     file = fopen("managers.txt", "r");
     if (file == NULL) {
@@ -882,127 +904,25 @@ int managerLogin() {
     return 1;
 }
 
-int managerSignupRequest() {
-    FILE *file;
-    char username[MAX_USERNAME], password[MAX_PASSWORD], fullname[MAX_NAME], phone[20];
-    char fileUsername[MAX_USERNAME];
-    char line[MAX_LINE];
-    int userExists = 0;
-    system("cls");
-
-    printf("                              MANAGER REGISTRATION REQUEST\n");
-    printf("Let's create your manager registration request.\n");
-    printf("Please provide the following information:\n\n");
-
-    printf("Choose a username: ");
-    fgets(username, MAX_USERNAME, stdin);
-    username[strcspn(username, "\n")] = '\0';
-
-    if (strlen(username) == 0) {
-        printf("\nUsername cannot be empty.\n");
-        return 0;
-    }
-
-    printf("Create a password: ");
-    fgets(password, MAX_PASSWORD, stdin);
-    password[strcspn(password, "\n")] = '\0';
-
-    if (strlen(password) == 0) {
-        printf("\nPassword cannot be empty.\n");
-        return 0;
-    }
-
-    printf("Enter your full name: ");
-    fgets(fullname, MAX_NAME, stdin);
-    fullname[strcspn(fullname, "\n")] = '\0';
-
-    if (strlen(fullname) == 0) {
-        printf("\nFull name cannot be empty.\n");
-        return 0;
-    }
-
-    printf("Enter your phone number: ");
-    fgets(phone, sizeof(phone), stdin);
-    phone[strcspn(phone, "\n")] = '\0';
-
-    if (strlen(phone) == 0) {
-        printf("\nPhone number cannot be empty.\n");
-        return 0;
-    }
-
-    printf("\nChecking username availability...\n");
-
-    // Check in active managers
-    file = fopen("managers.txt", "r");
-    if (file != NULL) {
-        while (fgets(line, MAX_LINE, file)) {
-            if (sscanf(line, "%s", fileUsername) == 1) {
-                if (strcmp(username, fileUsername) == 0) {
-                    userExists = 1;
-                    break;
-                }
-            }
-        }
-        fclose(file);
-    }
-
-    // Check in pending requests
-    if (!userExists) {
-        file = fopen("manager_requests.txt", "r");
-        if (file != NULL) {
-            while (fgets(line, MAX_LINE, file)) {
-                if (sscanf(line, "%s", fileUsername) == 1) {
-                    if (strcmp(username, fileUsername) == 0) {
-                        userExists = 1;
-                        break;
-                    }
-                }
-            }
-            fclose(file);
-        }
-    }
-
-    if (userExists) {
-        printf("\nSorry, this username is already taken or has a pending request.\n");
-        printf("Please choose a different username.\n\n");
-        return 0;
-    }
-
-    file = fopen("manager_requests.txt", "a");
-    if (file == NULL) {
-        printf("\nSystem error: Unable to submit request at this time.\n");
-        return 0;
-    }
-
-    char date[20];
-    getCurrentDate(date);
-
-    fprintf(file, "%s %s %s %s %s Pending\n", username, password, fullname, phone, date);
-    fclose(file);
-
-    return 1;
-}
 
 void managerDashboard() {
     int choice;
 
     while (1) {
         system("cls");
-        printf("\n========================================================\n");
-        printf("              MANAGER DASHBOARD\n");
-        printf("========================================================\n");
+        printCentered(BRIGHT_RED"              MANAGER DASHBOARD\n"RESET);
+        printCentered(BRIGHT_BLUE"========================================================\n"RESET);
         printf("Welcome back, %s!\n\n", current_username);
-        printf("Choose an option:\n");
-        printf("1. View All Booking Requests\n");
-        printf("2. Approve/Reject Bookings\n");
-        printf("3. View All Students\n");
-        printf("4. Manage Room Availability\n");
-        printf("5. View Complaints\n");
-        printf("6. Respond to Complaints\n");
-        printf("7. Process Check-in/Check-out Requests\n");
-        printf("8. Generate Reports\n");
-        printf("9. Logout\n");
-        printf("\nEnter your choice: ");
+        printCentered(BRIGHT_GREEN"1. View All Booking Requests\n"RESET);
+        printCentered(BRIGHT_GREEN"2. Approve/Reject Bookings\n"RESET);
+        printCentered(BRIGHT_GREEN"3. View All Students\n"RESET);
+        printCentered(BRIGHT_GREEN"4. Manage Room Availability\n"RESET);
+        printCentered(BRIGHT_GREEN"5. View Complaints\n"RESET);
+        printCentered(BRIGHT_GREEN"6. Respond to Complaints\n"RESET);
+        printCentered(BRIGHT_GREEN"7. Process Check-in/Check-out Requests\n"RESET);
+        printCentered(BRIGHT_GREEN"8. Generate Reports\n"RESET);
+        printCentered("9. Logout\n");
+        printf(BRIGHT_YELLOW"\nEnter your choice: "RESET);
 
         if (scanf("%d", &choice) != 1) {
             printf("Invalid input! Please enter a number.\n");
@@ -1014,30 +934,39 @@ void managerDashboard() {
         switch (choice) {
             case 1:
                 viewAllBookings();
+
                 break;
             case 2:
                 approveRejectBookings();
+
                 break;
             case 3:
                 viewAllStudents();
+
                 break;
             case 4:
                 manageRooms();
+
                 break;
             case 5:
                 viewComplaints();
+
                 break;
             case 6:
                 respondToComplaint();
+
                 break;
             case 7:
                 processCheckinRequests();
+
                 break;
             case 8:
                 generateReports();
+
                 break;
             case 9:
                 printf("\nLogging out...\n");
+                system("cls");
                 return;
             default:
                 printf("\nInvalid choice. Please try again.\n");
@@ -1058,16 +987,16 @@ void viewAllBookings() {
     char student_name[MAX_NAME], student_phone[20];
     system("cls");
 
-    printf("\n========================================================\n");
-    printf("                   ALL BOOKING REQUESTS\n");
-    printf("========================================================\n");
+
+    printCentered(BRIGHT_RED"ALL BOOKING REQUESTS\n");
+    printCentered(BRIGHT_BLUE"========================================================\n\n\n");
     printf("ID   | Username   | Room | Date       | Status   | Student Name\n");
     printf("----------------------------------------------------------\n");
 
     while (fscanf(file, "%d %s %d %s %s %s %s",
                   &booking_id, student_username, &room_number,
                   booking_date, status, student_name, student_phone) == 7) {
-        printf("%-4d | %-10s | %-4d | %-10s | %-8s | %s\n",
+        printf(BRIGHT_YELLOW"%-4d | %-10s | %-4d | %-10s | %-8s | %s\n"RESET,
                booking_id, student_username, room_number,
                booking_date, status, student_name);
     }
@@ -1092,9 +1021,9 @@ void approveRejectBookings() {
     }
     clearInputBuffer();
 
-    printf("\n1. Approve Booking\n");
-    printf("2. Reject Booking\n");
-    printf("Enter your choice: ");
+    printCentered(BRIGHT_GREEN"1. Approve Booking\n"RESET);
+    printCentered(BRIGHT_GREEN"2. Reject Booking\n\n\n"RESET);
+    printf(BRIGHT_YELLOW"Enter your choice: "RESET);
     if (scanf("%d", &choice) != 1 || (choice != 1 && choice != 2)) {
         printf("Invalid choice!\n");
         clearInputBuffer();
@@ -1191,9 +1120,8 @@ void viewAllStudents() {
     char username[MAX_USERNAME], password[MAX_PASSWORD];
     system("cls");
 
-    printf("\n========================================================\n");
-    printf("                   ALL REGISTERED STUDENTS\n");
-    printf("========================================================\n");
+    printCentered(BRIGHT_RED"ALL REGISTERED STUDENTS\n"RESET);
+    printCentered(BRIGHT_BLUE"========================================================\n"RESET);
     printf("Username\n");
     printf("----------------------------------------------------------\n");
 
@@ -1207,9 +1135,9 @@ void viewAllStudents() {
     // Show students with bookings
     file = fopen("bookings.txt", "r");
     if (file != NULL) {
-        printf("\n========================================================\n");
-        printf("              STUDENTS WITH ROOM BOOKINGS\n");
-        printf("========================================================\n");
+        system("cls");
+        printCentered(BRIGHT_RED"STUDENTS WITH ROOM BOOKINGS\n"RESET);
+        printCentered(BRIGHT_BLUE"========================================================\n"RESET);
         printf("Username   | Room | Status   | Student Name\n");
         printf("----------------------------------------------------------\n");
 
@@ -1220,7 +1148,7 @@ void viewAllStudents() {
         while (fscanf(file, "%d %s %d %s %s %s %s",
                       &booking_id, student_username, &room_number,
                       booking_date, status, student_name, student_phone) == 7) {
-            printf("%-10s | %-4d | %-8s | %s\n",
+            printf(BRIGHT_YELLOW"%-10s | %-4d | %-8s | %s\n"RESET,
                    student_username, room_number, status, student_name);
         }
         printf("========================================================\n");
@@ -1232,15 +1160,14 @@ void manageRooms() {
     int choice;
     system("cls");
 
-    printf("\n========================================================\n");
-    printf("              ROOM MANAGEMENT\n");
-    printf("========================================================\n");
-    printf("Choose an option:\n");
-    printf("1. View All Rooms Status\n");
-    printf("2. Make Room Available/Unavailable\n");
-    printf("3. Update Room Details\n");
-    printf("4. Return to Dashboard\n");
-    printf("\nEnter your choice: ");
+
+    printCentered(BRIGHT_RED"ROOM MANAGEMENT\n"RESET);
+    printCentered(BRIGHT_BLUE"===========================================\n\n\n"RESET);
+    printCentered(BRIGHT_GREEN"1. View All Rooms Status\n"RESET);
+    printCentered(BRIGHT_GREEN"2. Make Room Available/Unavailable\n"RESET);
+    printCentered(BRIGHT_GREEN"3. Update Room Details\n"RESET);
+    printCentered("4. Return to Dashboard\n");
+    printf(BRIGHT_YELLOW"\nEnter your choice: "RESET);
 
     if (scanf("%d", &choice) != 1) {
         printf("Invalid input!\n");
@@ -1256,22 +1183,22 @@ void manageRooms() {
 
     switch (choice) {
         case 1:
+            system("cls");
             file = fopen("rooms.txt", "r");
             if (file == NULL) {
                 printf("Error accessing room data.\n");
                 return;
             }
 
-            printf("\n========================================================\n");
-            printf("                   ALL ROOMS STATUS\n");
-            printf("========================================================\n");
+            printCentered(BRIGHT_RED"ALL ROOMS STATUS\n"RESET);
+            printCentered(BRIGHT_BLUE"========================================================\n\n\n"RESET);
             printf("Room | Floor | Type   | Capacity | Occupied | Rent    | Available\n");
             printf("----------------------------------------------------------------\n");
 
             while (fscanf(file, "%d %d %s %d %d %f %s %d",
                           &room_number, &floor, room_type, &capacity,
                           &occupied, &rent, facilities, &available) == 8) {
-                printf("%-4d | %-5d | %-6s | %-8d | %-8d | %-7.2f | %s\n",
+                printf(BRIGHT_YELLOW"%-4d | %-5d | %-6s | %-8d | %-8d | %-7.2f | %s\n"RESET,
                        room_number, floor, room_type, capacity,
                        occupied, rent, available ? "Yes" : "No");
             }
@@ -1280,6 +1207,7 @@ void manageRooms() {
             break;
 
         case 2: {
+            system("cls");
             int target_room, new_status;
             printf("Enter room number to change availability: ");
             if (scanf("%d", &target_room) != 1) {
@@ -1337,6 +1265,7 @@ void manageRooms() {
         }
 
         case 3:
+            system("cls");
             printf("Room details update feature will be implemented.\n");
             break;
 
@@ -1373,6 +1302,7 @@ void viewComplaints() {
 }
 
 void respondToComplaint() {
+    system("cls");
     char username[MAX_USERNAME], response[300];
     printf("Enter student username to respond to: ");
     fgets(username, sizeof(username), stdin);
@@ -1602,6 +1532,7 @@ void handleOwner() {
     switch (action) {
         case 1:
             if (ownerLogin()) {
+                system("cls");
                 printf("                             OWNER CONTROL PANEL\n");
                 printf("Full system access granted! Welcome to your home \n");
                 pressEnterToContinue();
@@ -1609,6 +1540,7 @@ void handleOwner() {
             }
             break;
         case 2:
+            system("cls");
             printf("\nReturning to main menu...\n\n");
             break;
         default:
@@ -1657,16 +1589,15 @@ void ownerDashboard() {
         printf("Welcome back, %s!\n\n", current_username);
         printf("Choose an option:\n");
         printf("1. View All Managers\n");
-        printf("2. Approve/Reject Manager Requests\n");
-        printf("3. Add New Manager\n");
-        printf("4. Remove Manager\n");
-        printf("5. Set Hostel Rules & Policies\n");
-        printf("6. View Hostel Rules\n");
-        printf("7. View All Hostel Data\n");
-        printf("8. View All Complaints\n");
-        printf("9. Generate Comprehensive Reports\n");
-        printf("10. System Settings\n");
-        printf("11. Logout\n");
+        printf("2. Add New Manager\n");
+        printf("3. Remove Manager\n");
+        printf("4. Set Hostel Rules & Policies\n");
+        printf("5. View Hostel Rules\n");
+        printf("6. View All Hostel Data\n");
+        printf("7. View All Complaints\n");
+        printf("8. Generate Comprehensive Reports\n");
+        printf("9. System Settings\n");
+        printf("10. Logout\n");
         printf("\nEnter your choice: ");
 
         if (scanf("%d", &choice) != 1) {
@@ -1681,33 +1612,30 @@ void ownerDashboard() {
                 viewAllManagers();
                 break;
             case 2:
-                approveRejectManagerRequests();
-                break;
-            case 3:
                 addNewManager();
                 break;
-            case 4:
+            case 3:
                 removeManager();
                 break;
-            case 5:
+            case 4:
                 setHostelRules();
                 break;
-            case 6:
+            case 5:
                 viewHostelRules();
                 break;
-            case 7:
+            case 6:
                 viewAllHostelData();
                 break;
-            case 8:
+            case 7:
                 viewComplaintsAsOwner();
                 break;
-            case 9:
+            case 8:
                 generateOwnerReports();
                 break;
-            case 10:
+            case 9:
                 manageSystemSettings();
                 break;
-            case 11:
+            case 10:
                 printf("\nLogging out...\n");
                 return;
             default:
@@ -1742,96 +1670,6 @@ void viewAllManagers() {
     fclose(file);
 }
 
-void approveRejectManagerRequests() {
-    FILE *file = fopen("manager_requests.txt", "r");
-    system("cls");
-
-    printf("\n========================================================\n");
-    printf("              MANAGER REGISTRATION REQUESTS\n");
-    printf("========================================================\n");
-
-    if (file == NULL) {
-        printf("No pending manager requests found.\n");
-        return;
-    }
-
-    char username[MAX_USERNAME], password[MAX_PASSWORD], fullname[MAX_NAME];
-    char phone[20], date[20], status[20];
-    int found = 0;
-
-    printf("Username   | Full Name        | Phone      | Date       | Status\n");
-    printf("------------------------------------------------------------\n");
-
-    while (fscanf(file, "%s %s %s %s %s %s", username, password, fullname, phone, date, status) == 6) {
-        printf("%-10s | %-16s | %-10s | %-10s | %s\n", username, fullname, phone, date, status);
-        found = 1;
-    }
-
-    if (!found) {
-        printf("No requests found.\n");
-        fclose(file);
-        return;
-    }
-
-    fclose(file);
-
-    printf("========================================================\n");
-    printf("\nEnter username to process: ");
-    char target_username[MAX_USERNAME];
-    fgets(target_username, sizeof(target_username), stdin);
-    target_username[strcspn(target_username, "\n")] = '\0';
-
-    printf("1. Approve\n2. Reject\nEnter choice: ");
-    int choice;
-    if (scanf("%d", &choice) != 1 || (choice != 1 && choice != 2)) {
-        printf("Invalid choice!\n");
-        clearInputBuffer();
-        return;
-    }
-    clearInputBuffer();
-
-    // Process the request
-    file = fopen("manager_requests.txt", "r");
-    FILE *temp = fopen("temp_requests.txt", "w");
-    FILE *managers_file = fopen("managers.txt", "a");
-
-    if (file == NULL || temp == NULL) {
-        printf("Error processing request.\n");
-        return;
-    }
-
-    int processed = 0;
-    while (fscanf(file, "%s %s %s %s %s %s", username, password, fullname, phone, date, status) == 6) {
-        if (strcmp(username, target_username) == 0 && strcmp(status, "Pending") == 0) {
-            if (choice == 1) {
-                // Approve - add to managers.txt
-                if (managers_file != NULL) {
-                    fprintf(managers_file, "%s %s Active\n", username, password);
-                }
-                fprintf(temp, "%s %s %s %s %s Approved\n", username, password, fullname, phone, date);
-                printf("Manager request approved successfully!\n");
-            } else {
-                fprintf(temp, "%s %s %s %s %s Rejected\n", username, password, fullname, phone, date);
-                printf("Manager request rejected.\n");
-            }
-            processed = 1;
-        } else {
-            fprintf(temp, "%s %s %s %s %s %s\n", username, password, fullname, phone, date, status);
-        }
-    }
-
-    fclose(file);
-    fclose(temp);
-    if (managers_file != NULL) fclose(managers_file);
-
-    if (processed) {
-        remove("manager_requests.txt");
-        rename("temp_requests.txt", "manager_requests.txt");
-    } else {
-        remove("temp_requests.txt");
-        printf("Request not found or already processed.\n");
-    }
-}
 
 void addNewManager() {
     char username[MAX_USERNAME], password[MAX_PASSWORD];
@@ -2341,8 +2179,8 @@ int login(char *filename, char *role) {
     int found = 0;
     system("cls");
 
-    printf("                                %s LOGIN\n", role);
-    printf("Please enter your login information.\n\n");
+    printf(RED"                                                                    %s LOGIN\n\n\n"RESET, role);
+    printCentered("Please enter your login information.\n\n\n\n\n\n\n");
 
     printf("Username: ");
     fgets(current_username, MAX_USERNAME, stdin);
@@ -2459,4 +2297,15 @@ void pressEnterToContinue() {
     printf("Press Enter to continue...");
     getchar();
     printf("\n");
+}
+void printCentered(const char *text) {
+    int len = strlen(text);
+    int spaces = (TERMINAL_WIDTH - len) / 2;
+
+    if (spaces < 0) spaces = 0; // Avoid negative spaces
+
+    for (int i = 0; i < spaces; i++) {
+        printf(" ");
+    }
+    printf("%s\n", text);
 }
